@@ -10,9 +10,10 @@ for example Arize Phoenix or another OpenInference-aware OTLP backend.
 
 ## Default Path
 
-- Build the binding-specific `OpenInferenceConfig`
-- Set endpoint, transport, service metadata, and headers
-- Construct and register the subscriber
+- Build the binding-specific `OpenTelemetryConfig` with type `openinference`
+  and the required endpoint
+- Set transport, service metadata, and headers
+- Construct and register `OpenTelemetrySubscriber`
 - Run instrumented scoped work
 - Deregister, flush, and shut down when done
 
@@ -21,8 +22,7 @@ for example Arize Phoenix or another OpenInference-aware OTLP backend.
 - OpenInference export is for OTLP backends that understand model-centric
   OpenInference semantic conventions.
 - Set `transport`, `endpoint`, and `service_name`, then add a namespace, version,
-  instrumentation scope, headers, resource attributes, timeout, or
-  `attribute_mappings` when needed.
+  instrumentation scope, headers, resource attributes, or timeout when needed.
 - NeMo Relay projects lifecycle payload fields to typed OTLP attributes with
   dotted names. Non-LLM start metadata and all end metadata use
   `openinference.metadata`, while mark metadata uses
@@ -30,10 +30,11 @@ for example Arize Phoenix or another OpenInference-aware OTLP backend.
 - NeMo Relay emits a top-level object or array field as a JSON string, omits a
   top-level `null` field, and no longer emits the old aggregate `*_json` payload
   attributes.
-- Use `attribute_mappings` to copy a fully qualified projected attribute to a
-  backend-specific alias without changing its OTLP type.
-- Start with `http_binary` transport and an OTLP/HTTP traces endpoint. Use
-  `grpc` only when a Tokio runtime is active.
+- OpenInference is a fixed projection in the unified OpenTelemetry exporter;
+  do not offer a standalone section, class, feature, or projection controls.
+- Start with `http_binary` transport and an OTLP/HTTP traces endpoint. The
+  subscriber owns the runtime needed by `grpc`, including for synchronous
+  direct construction.
 - Scope, tool, and LLM start inputs become `input.value`.
 - Scope, tool, and LLM end outputs become `output.value`.
 - LLM annotations follow the freshness rules:
@@ -47,7 +48,10 @@ for example Arize Phoenix or another OpenInference-aware OTLP backend.
 - Use explicit config fields for endpoint, headers, resource attributes, and
   service identity in application code.
 - Validate export by checking construction logs, collector traffic, and spans
-  from the same `root_uuid` in the tracing backend.
+  with matching `nemo_relay.uuid` / `nemo_relay.parent_uuid` lineage. For
+  coding-agent sessions, use `nemo_relay.session.instance_id` for logical
+  session correlation. Endpoints that receive the same lifecycle events also
+  derive the same native trace and span IDs.
 
 ## Important Semantics
 

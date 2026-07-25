@@ -1,5 +1,5 @@
 ## Description: <br>
-Use this skill when choosing or configuring NeMo Relay observability through the built-in plugin, subscribers, or exporters, including raw ATOF events, ATIF trajectories, OpenTelemetry traces, OpenInference export, or custom event handling. <br>
+Use this skill when choosing or configuring NeMo Relay observability through the built-in plugin, subscribers, or exporters, including raw ATOF events, ATIF trajectories, typed OpenTelemetry projections, or custom event handling. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 

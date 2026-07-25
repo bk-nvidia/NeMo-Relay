@@ -64,9 +64,9 @@ Start by proving which runtime layer is failing before changing configuration.
 - **Adaptive behavior unchanged**: confirm instrumentation emits events, the
   adaptive component is enabled, policy allows the behavior, and the call path
   reaches the configured component.
-- **OpenTelemetry or OpenInference export failure**: confirm `http_binary` vs
-  `grpc`, endpoint, headers, target support, and whether a native gRPC exporter
-  has an active Tokio runtime.
+- **OpenTelemetry export failure**: confirm the projection type,
+  `http_binary` versus `grpc`, endpoint, headers, TLS, and target support. The
+  subscriber owns the runtime required by the native gRPC exporter.
 - **Callback succeeded but no lifecycle events appear**: confirm the integration
   uses managed execute helpers or balanced manual start/end APIs, not only the
   underlying business callback.

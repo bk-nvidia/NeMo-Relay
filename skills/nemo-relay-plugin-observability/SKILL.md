@@ -1,6 +1,6 @@
 ---
 name: nemo-relay-plugin-observability
-description: Use this skill when choosing or configuring NeMo Relay observability through the built-in plugin, subscribers, or exporters, including raw ATOF events, ATIF trajectories, OpenTelemetry traces, OpenInference export, or custom event handling.
+description: Use this skill when choosing or configuring NeMo Relay observability through the built-in plugin, subscribers, or exporters, including raw ATOF events, ATIF trajectories, typed OpenTelemetry projections, or custom event handling.
 license: Apache-2.0
 metadata:
   author: NVIDIA Corporation and Affiliates
@@ -27,10 +27,9 @@ Select the output that best matches the user's immediate inspection target:
   Use ATOF JSONL; read `references/atof.md`.
 - **Portable execution trajectories**
   Use ATIF; read `references/atif.md`.
-- **General OTLP tracing**
-  Use OpenTelemetry; read `references/opentelemetry.md`.
-- **OpenInference-aware backends**
-  Use OpenInference; read `references/openinference.md`.
+- **OTLP tracing**
+  Use a typed OpenTelemetry endpoint (`full`, `gen_ai`, or `openinference`); read
+  `references/opentelemetry.md`.
 
 Choose one output first and verify it before adding another. ATOF is the
 default local proof because it preserves the raw event stream with the least
@@ -53,7 +52,7 @@ Use this model when explaining how capture and export relate:
 - Plugin-installed subscribers are reusable, configuration-driven runtime
   components.
 - Exporter-oriented subscribers preserve raw ATOF or translate the event stream
-  into ATIF, OpenTelemetry, or OpenInference output.
+  into ATIF or a typed OpenTelemetry projection.
 - Event payloads reflect sanitized post-guardrail input and output when calls
   use managed helpers or manual lifecycle params provide those fields.
 - LLM annotations follow the freshness rules:
@@ -79,18 +78,17 @@ Use this model when explaining how capture and export relate:
 1. Create the exporter or subscriber.
 2. Register it with a unique name before the relevant scoped work.
 3. Run NeMo Relay-instrumented work inside scopes.
-4. Flush if deterministic delivery is needed and the binding supports it.
-5. Deregister it, then shut it down when the process or subsystem is done.
+4. Flush and deregister in the exporter-specific reference's documented order.
+5. Shut it down when the process or subsystem is done.
 
 ## Binding Names
 
 Use the names exported by the selected language binding:
 
-- Python: `nemo_relay.subscribers.register(...)`,
-  `AtofExporter`, `AtifExporter`, `OpenTelemetrySubscriber`, and
-  `OpenInferenceSubscriber`
+- Python: `nemo_relay.subscribers.register(...)`, `AtofExporter`,
+  `AtifExporter`, and `OpenTelemetrySubscriber`
 - Node.js: root exports `registerSubscriber(...)`, `AtofExporter`,
-  `AtifExporter`, `OpenTelemetrySubscriber`, and `OpenInferenceSubscriber`
+  `AtifExporter`, and `OpenTelemetrySubscriber`
 - Rust: `nemo_relay::api::subscriber` and `nemo_relay::observability::*`
 - Go: source-first wrappers expose equivalent register, exporter, and subscriber
   lifecycle methods
@@ -103,7 +101,8 @@ Load only the reference required by the selected output:
   offline inspection.
 - Load `references/atif.md` for ATIF trajectories.
 - Load `references/opentelemetry.md` for OTLP/OpenTelemetry traces.
-- Load `references/openinference.md` for OpenInference semantic traces.
+- Load `references/openinference.md` for the `openinference` OpenTelemetry
+  projection.
 
 ## Use Another Skill When
 
