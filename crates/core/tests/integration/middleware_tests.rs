@@ -1648,6 +1648,7 @@ async fn test_scope_local_guardrail_lifecycle() {
             .build(),
     )
     .unwrap();
+    flush_subscribers().unwrap();
     assert_eq!(
         call_count.load(Ordering::SeqCst),
         1,
