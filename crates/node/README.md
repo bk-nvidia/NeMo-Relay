@@ -86,7 +86,7 @@ async function main() {
     event("initialized", handle, { binding: "node" }, null);
   });
 
-  flushSubscribers();
+  await flushSubscribers();
   await new Promise((resolve) => setImmediate(resolve));
   deregisterSubscriber("printer");
 }
@@ -97,9 +97,10 @@ main().catch((error) => {
 });
 ```
 
-Native subscriber delivery is asynchronous. `flushSubscribers()` drains the
-native dispatcher. The extra event-loop turn lets queued JavaScript callback
-side effects complete before deregistration or exit.
+Native subscriber delivery is asynchronous. Awaiting `flushSubscribers()` drains
+the native dispatcher without blocking the Node.js event loop. The extra
+event-loop turn lets queued JavaScript callback side effects complete before
+deregistration or exit.
 
 The main runtime API is exported from `nemo-relay-node`. Additional entry points
 are available at `nemo-relay-node/typed`, `nemo-relay-node/plugin`,
