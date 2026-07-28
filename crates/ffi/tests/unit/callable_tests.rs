@@ -737,7 +737,7 @@ fn test_llm_sanitizers_fail_closed_for_runtime_codec_ids_with_embedded_nul() {
             runtime_identity.clone(),
         ),
     ))
-    .expect_err("an embedded runtime codec ID must fail the async callback wrapper");
+    .expect_err("an embedded runtime codec ID must fail the request sanitizer wrapper");
     assert!(
         request_error
             .to_string()
@@ -755,7 +755,7 @@ fn test_llm_sanitizers_fail_closed_for_runtime_codec_ids_with_embedded_nul() {
         json!({"secret": "must be omitted"}),
         nemo_relay::api::runtime::LlmSanitizeResponseContext::with_identity(runtime_identity),
     ))
-    .expect_err("an embedded runtime codec ID must fail the async callback wrapper");
+    .expect_err("an embedded runtime codec ID must fail the response sanitizer wrapper");
     assert!(
         response_error
             .to_string()
