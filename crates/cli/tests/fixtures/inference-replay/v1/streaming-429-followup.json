@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "scenario_id": "streaming-429-followup",
+  "seed": 577,
+  "provider_surface": "anthropic_messages",
+  "step_timeout_ms": 3000,
+  "scenario_timeout_ms": 10000,
+  "require_upstream_connection_reuse": true,
+  "steps": [
+    {
+      "request": "synthetic_stream",
+      "provider_response": "rate_limit_json_keep_alive",
+      "expected": "rate_limit_passthrough"
+    },
+    {
+      "request": "synthetic_stream",
+      "provider_response": "anthropic_sse_success_close",
+      "expected": "stream_success"
+    }
+  ]
+}
