@@ -1070,6 +1070,13 @@ test-claude-plugin-e2e:
 test-hermes-mcp-e2e:
     ./scripts/test-hermes-mcp-e2e.sh
 
+# Black-box, local-only replay of curated inference scenarios.
+test-inference-replay scenario="":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    filter="{{ scenario }}"
+    cargo test -p nemo-relay-cli --test inference_replay_tests "${filter//-/_}"
+
 # --set [output_dir=<path>] [ci=true|false]
 test-rust:
     #!/usr/bin/env bash
